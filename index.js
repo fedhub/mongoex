@@ -3,7 +3,6 @@ var app        = express();
 var server     = require('http').createServer(app);
 var path       = require('path');
 var bodyParser = require('body-parser');
-var mongoose   = require('mongoose');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -21,7 +20,24 @@ app.use(function(req, res, next) {
     next();
 });
 
-mongoose.connect('mongodb://localhost:27017/mongo');
+// MONGO
+
+// Retrieve
+var MongoClient = require('mongodb').MongoClient;
+
+// Connect to the db
+MongoClient.connect("mongodb://localhost:27017/mongo", function(err, db) {
+    if(!err) {
+        console.log("We are connected");
+        db.createCollection("users", function(err, collection){
+            collection.insert({"name":"shimon"});
+            console.log("Collection name: "+collection.collectionName);
+        });
+    }
+    else{console.log('not');}
+});
+
+// MONGO
 
 app.use(require('./routers'));
 
