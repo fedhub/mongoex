@@ -1,4 +1,4 @@
-var express    = require("express");
+var express    = require('express');
 var app        = express();
 var server     = require('http').createServer(app);
 var path       = require('path');
@@ -20,25 +20,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-// MONGO
-
-// Retrieve
-var MongoClient = require('mongodb').MongoClient;
-
-// Connect to the db
-MongoClient.connect("mongodb://localhost:27017/mongo", function(err, db) {
-    if(!err) {
-        console.log("We are connected");
-        db.createCollection("users", function(err, collection){
-            collection.insert({"name":"shimon"});
-            console.log("Collection name: "+collection.collectionName);
-        });
-    }
-    else{console.log('not');}
-});
-
-// MONGO
-
+app.use(require('./mongo'));
 app.use(require('./routers'));
 
 var port = process.env.PORT || 3000;
